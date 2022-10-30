@@ -31,7 +31,6 @@ fn main() -> ExitCode {
         } else {
             loop {
                 buf.clear();
-                let prev_count = buf.len();
 
                 if let Some(newline_index) = read_newline_index(&mut stdin, &mut buf) {
                     consume_newline(&mut buf, &mut buf2, newline_index);
@@ -39,7 +38,7 @@ fn main() -> ExitCode {
                     continue 'outer;
                 }
 
-                if buf.len() == prev_count {
+                if buf.len() == 0 {
                     // Reached EOF
                     return ExitCode::FAILURE;
                 }
