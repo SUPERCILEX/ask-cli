@@ -69,8 +69,10 @@ fn main() -> ExitCode {
                         }
                     }
                     None => {
-                        failed = true;
-                        buf.clear();
+                        if buf.len() == buf.capacity() {
+                            failed = true;
+                            buf.clear();
+                        }
                     }
                 }
             }
