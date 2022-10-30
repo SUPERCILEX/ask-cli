@@ -134,20 +134,20 @@ jobs:
         with:
           use-cross: true
           command: rustc
-          args: --release --locked --bin=ftzz --target=${{ matrix.target }} -- -C target-feature=+crt-static
+          args: --release --locked --bin=ask --target=${{ matrix.target }} -- -C target-feature=+crt-static
       - name: Upload binary
         if: matrix.os != 'windows-latest'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/${{ matrix.target }}/release/ftzz
-          asset_name: ftzz-${{ matrix.target }}
+          file: target/${{ matrix.target }}/release/ask
+          asset_name: ask-${{ matrix.target }}
           tag: ${{ github.ref }}
       - name: Upload binary
         if: matrix.os == 'windows-latest'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/${{ matrix.target }}/release/ftzz.exe
-          asset_name: ftzz-${{ matrix.target }}.exe
+          file: target/${{ matrix.target }}/release/ask.exe
+          asset_name: ask-${{ matrix.target }}.exe
           tag: ${{ github.ref }}
