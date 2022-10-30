@@ -2,10 +2,8 @@
 
 use std::{
     env, io,
-    io::{BorrowedBuf, Read, StdinLock, Write},
-    mem::MaybeUninit,
+    io::{BufRead, Write},
     process::ExitCode,
-    str::from_utf8,
 };
 
 fn main() -> ExitCode {
@@ -13,37 +11,26 @@ fn main() -> ExitCode {
     let mut stdout = io::stdout().lock();
     let mut stdin = io::stdin().lock();
 
-    // max_len(yes, no, y, n) = 3 -> 3 + 2 bytes for new lines
-    let mut buf = [MaybeUninit::uninit(); 5];
-    let mut buf = BorrowedBuf::from(buf.as_mut());
+    let mut reply = String::new();
 
     loop {
         stdout.write_all(question.as_bytes()).unwrap();
         stdout.write_all(b"[Y/n] ").unwrap();
         stdout.flush().unwrap();
 
-        let reply = from_utf8({
-            if let Some(newline_index) = newline_index(&mut stdin, &mut buf) {
-                &buf.filled()[..newline_index]
-            } else {
-                while newline_index(&mut stdin, &mut buf).is_none() {}
-                continue;
-            }
-        })
-        .unwrap();
-        // TODO https://github.com/rust-lang/rust/pull/103754
-        match reply.to_ascii_lowercase().as_str() {
+        if stdin.read_line(&mut reply).unwrap() == 0 {
+            return ExitCode::FAILURE;
+        }
+        reply.pop().unwrap();
+        reply.make_ascii_lowercase();
+        match reply.as_str() {
             "" | "y" | "yes" => return ExitCode::SUCCESS,
             "n" | "no" => return ExitCode::FAILURE,
-            _ => {}
+            _ => {
+                reply.clear();
+            }
         }
     }
-}
-
-fn newline_index(stdin: &mut StdinLock, buf: &mut BorrowedBuf) -> Option<usize> {
-    buf.clear();
-    stdin.read_buf(buf.unfilled()).unwrap();
-    buf.filled().iter().position(|b| *b == b'\n' || *b == b'\r')
 }
 
 fn question() -> String {

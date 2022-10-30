@@ -1,0 +1,6 @@
+bin.name = "ask"
+args = ["?"]
+stdin = "lkdfdlkfjdf dlkf ddklj fdlkjdlfd fldf dlf dlf dlfd\n \n  \n   \n    \n     \nyees\nye\nyo\nyoyo\nyoyoyoyoyoyoyoyoyoyo\nn\n"
+
+stdout = "? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] "
+status.code = 1

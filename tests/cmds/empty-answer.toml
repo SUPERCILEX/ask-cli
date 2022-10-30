@@ -1,0 +1,6 @@
+bin.name = "ask"
+args = ["?"]
+stdin = ""
+
+stdout = "? [Y/n] "
+status.code = 1

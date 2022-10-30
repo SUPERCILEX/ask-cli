@@ -1,0 +1,5 @@
+bin.name = "ask"
+args = ["The", "quick", "brown", "fox jumps over", "the", "lazy", "dog."]
+stdin = "yes\n"
+
+stdout = "The quick brown fox jumps over the lazy dog. [Y/n] "
