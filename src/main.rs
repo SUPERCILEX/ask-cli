@@ -21,6 +21,14 @@ fn main() -> ExitCode {
         BorrowedBuf::from(buf2.as_mut()),
     );
 
+    macro_rules! consume_newline {
+        ($newline_index:expr) => {
+            buf2.clear();
+            buf2.unfilled().append(&buf.filled()[$newline_index + 1..]);
+            mem::swap(&mut buf, &mut buf2);
+        };
+    }
+
     'outer: loop {
         stdout.write_all(question.as_bytes()).unwrap();
         stdout.write_all(b"[Y/n] ").unwrap();
@@ -33,8 +41,7 @@ fn main() -> ExitCode {
                 buf.clear();
 
                 if let Some(newline_index) = read_newline_index(&mut stdin, &mut buf) {
-                    consume_newline(&mut buf, &mut buf2, newline_index);
-                    mem::swap(&mut buf, &mut buf2);
+                    consume_newline!(newline_index);
                     continue 'outer;
                 }
 
@@ -51,16 +58,10 @@ fn main() -> ExitCode {
             "" | "y" | "yes" => return ExitCode::SUCCESS,
             "n" | "no" => return ExitCode::FAILURE,
             _ => {
-                consume_newline(&mut buf, &mut buf2, newline_index);
-                mem::swap(&mut buf, &mut buf2);
+                consume_newline!(newline_index);
             }
         }
     }
-}
-
-fn consume_newline(buf: &mut BorrowedBuf, buf2: &mut BorrowedBuf, newline_index: usize) {
-    buf2.clear();
-    buf2.unfilled().append(&buf.filled()[newline_index + 1..]);
 }
 
 fn read_newline_index(stdin: &mut StdinLock, buf: &mut BorrowedBuf) -> Option<usize> {
