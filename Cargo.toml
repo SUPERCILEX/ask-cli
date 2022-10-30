@@ -1,0 +1,23 @@
+[package]
+name = "ask-cli"
+version = "0.1.0"
+authors = ["Alex Saveau <saveau.alexandre@gmail.com>"]
+edition = "2021"
+description = "Ask CLI offers a simple way to ask a yes or no question."
+repository = "https://github.com/SUPERCILEX/ask-cli"
+keywords = ["cli", "answer", "ask", "question", "prompt"]
+categories = ["command-line-utilities"]
+license = "Apache-2.0"
+
+[dev-dependencies]
+trycmd = "0.14.1"
+
+[[bin]]
+name = "ask"
+path = "src/main.rs"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
