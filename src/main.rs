@@ -2,7 +2,7 @@
 
 use std::{
     env, io,
-    io::{BorrowedBuf, Read, StdinLock, Write},
+    io::{BorrowedBuf, Read, Write},
     mem,
     mem::MaybeUninit,
     process::ExitCode,
@@ -10,58 +10,85 @@ use std::{
 };
 
 fn main() -> ExitCode {
-    let question = question();
-    let mut stdout = io::stdout().lock();
-    let mut stdin = io::stdin().lock();
-
     // max_len(yes, no, y, n) = 3 -> 3 + 2 bytes for new lines
-    let (mut buf, mut buf2) = ([MaybeUninit::uninit(); 6], [MaybeUninit::uninit(); 6]);
+    const BUF_LEN: usize = 5;
+
+    let (mut buf, mut buf2) = (
+        [MaybeUninit::uninit(); BUF_LEN],
+        [MaybeUninit::uninit(); BUF_LEN],
+    );
     let (mut buf, mut buf2) = (
         BorrowedBuf::from(buf.as_mut()),
         BorrowedBuf::from(buf2.as_mut()),
     );
 
-    // TODO docs
-    macro_rules! consume_newline {
-        ($newline_index:expr) => {
-            let newline_index = $newline_index;
-            let next_index = if buf.filled()[newline_index] == b'\r' {
-                match buf.filled().get(newline_index + 1) {
-                    Some(c) if *c == b'\n' => newline_index + 2,
-                    Some(_) => newline_index + 1,
-                    None => newline_index - 1,
-                }
-            } else {
-                newline_index + 1
-            };
-
+    macro_rules! consume_bytes {
+        ($count:expr) => {
             buf2.clear();
-            buf2.unfilled().append(&buf.filled()[next_index..]);
+            buf2.unfilled().append(&buf.filled()[$count..]);
             mem::swap(&mut buf, &mut buf2);
         };
     }
 
-    'outer: loop {
-        stdout.write_all(question.as_bytes()).unwrap();
-        stdout.write_all(b"[Y/n] ").unwrap();
-        stdout.flush().unwrap();
+    macro_rules! consume_newline {
+        ($newline_index:expr) => {
+            let newline_index = $newline_index;
+            let is_crlf =
+                buf.filled()[newline_index] == b'\r' && buf.filled()[newline_index + 1] == b'\n';
+            let skip = if is_crlf { 2 } else { 1 };
+            consume_bytes!(newline_index + skip);
+        };
+    }
 
-        let newline_index = if let Some(newline_index) = read_newline_index(&mut stdin, &mut buf) {
-            newline_index
-        } else {
+    let mut stdin = io::stdin().lock();
+
+    /// Continuously reads from stdin until encountering a newline, returning
+    /// the index of its first byte.
+    macro_rules! read_line {
+        () => {{
+            let mut failed = false;
             loop {
-                buf.clear();
-
-                if let Some(newline_index) = read_newline_index(&mut stdin, &mut buf) {
-                    consume_newline!(newline_index);
-                    continue 'outer;
-                }
-
+                stdin.read_buf(buf.unfilled()).unwrap();
                 if buf.len() == 0 {
                     // Reached EOF
                     return ExitCode::from(2);
                 }
+
+                match buf.filled().iter().position(|b| *b == b'\n' || *b == b'\r') {
+                    Some(newline_index) if newline_index == BUF_LEN - 1 => {
+                        failed = true;
+                        // Potentially read in a '\n' to make a CRLF
+                        consume_bytes!(1);
+                    }
+                    Some(newline_index) => {
+                        break if failed {
+                            consume_newline!(newline_index);
+                            None
+                        } else {
+                            Some(newline_index)
+                        }
+                    }
+                    None => {
+                        failed = true;
+                        buf.clear();
+                    }
+                }
             }
+        }};
+    }
+
+    let question = question();
+    let mut stdout = io::stdout().lock();
+
+    loop {
+        stdout.write_all(question.as_bytes()).unwrap();
+        stdout.write_all(b"[Y/n] ").unwrap();
+        stdout.flush().unwrap();
+
+        let newline_index = if let Some(newline_index) = read_line!() {
+            newline_index
+        } else {
+            continue;
         };
 
         let reply = from_utf8(&buf.filled()[..newline_index]).unwrap();
@@ -74,11 +101,6 @@ fn main() -> ExitCode {
             }
         }
     }
-}
-
-fn read_newline_index(stdin: &mut StdinLock, buf: &mut BorrowedBuf) -> Option<usize> {
-    stdin.read_buf(buf.unfilled()).unwrap();
-    buf.filled().iter().position(|b| *b == b'\n' || *b == b'\r')
 }
 
 fn question() -> String {
