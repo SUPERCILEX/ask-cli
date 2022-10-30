@@ -15,16 +15,28 @@ fn main() -> ExitCode {
     let mut stdin = io::stdin().lock();
 
     // max_len(yes, no, y, n) = 3 -> 3 + 2 bytes for new lines
-    let (mut buf, mut buf2) = ([MaybeUninit::uninit(); 5], [MaybeUninit::uninit(); 5]);
+    let (mut buf, mut buf2) = ([MaybeUninit::uninit(); 6], [MaybeUninit::uninit(); 6]);
     let (mut buf, mut buf2) = (
         BorrowedBuf::from(buf.as_mut()),
         BorrowedBuf::from(buf2.as_mut()),
     );
 
+    // TODO docs
     macro_rules! consume_newline {
         ($newline_index:expr) => {
+            let newline_index = $newline_index;
+            let next_index = if buf.filled()[newline_index] == b'\r' {
+                match buf.filled().get(newline_index + 1) {
+                    Some(c) if *c == b'\n' => newline_index + 2,
+                    Some(_) => newline_index + 1,
+                    None => newline_index - 1,
+                }
+            } else {
+                newline_index + 1
+            };
+
             buf2.clear();
-            buf2.unfilled().append(&buf.filled()[$newline_index + 1..]);
+            buf2.unfilled().append(&buf.filled()[next_index..]);
             mem::swap(&mut buf, &mut buf2);
         };
     }
@@ -72,19 +84,11 @@ fn read_newline_index(stdin: &mut StdinLock, buf: &mut BorrowedBuf) -> Option<us
 fn question() -> String {
     let words = || env::args().skip(1);
 
-    let mut question = {
-        let mut cap = 0;
-        for word in words() {
-            // + 1 for spaces
-            cap += word.len() + 1;
-        }
-        String::with_capacity(cap)
-    };
-
+    let mut question =
+        String::with_capacity(words().len() + words().map(|word| word.len()).sum::<usize>());
     for word in words() {
         question.push_str(&word);
         question.push(' ');
     }
-
     question
 }
