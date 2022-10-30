@@ -59,7 +59,7 @@ fn main() -> ExitCode {
 
                 if buf.len() == 0 {
                     // Reached EOF
-                    return ExitCode::FAILURE;
+                    return ExitCode::from(2);
                 }
             }
         };
