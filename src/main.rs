@@ -32,8 +32,8 @@ fn main() -> ExitCode {
     macro_rules! consume_newline {
         ($newline_index:expr) => {
             let newline_index = $newline_index;
-            let is_crlf =
-                buf.filled()[newline_index] == b'\r' && buf.filled()[newline_index + 1] == b'\n';
+            let is_crlf = buf.filled()[newline_index] == b'\r'
+                && matches!(buf.filled().get(newline_index + 1), Some(b'\n'));
             let skip = if is_crlf { 2 } else { 1 };
             consume_bytes!(newline_index + skip);
         };
@@ -60,13 +60,13 @@ fn main() -> ExitCode {
         () => {{
             let mut failed = false;
             loop {
-                let is_eof = {
-                    debug_assert!(buf.len() < buf.capacity());
+                debug_assert!(buf.len() < buf.capacity());
 
-                    let prev_count = buf.len();
-                    stdin.read_buf(buf.unfilled()).unwrap();
-                    buf.len() == prev_count
-                };
+                stdin.read_buf(buf.unfilled()).unwrap();
+                if buf.len() == 0 {
+                    // Reached EOF
+                    return ExitCode::from(2);
+                }
 
                 if pending_crlf && buf.filled()[0] == b'\n' {
                     consume_bytes!(1);
@@ -76,8 +76,8 @@ fn main() -> ExitCode {
                 if let Some(newline_index) =
                     buf.filled().iter().position(|b| *b == b'\n' || *b == b'\r')
                 {
-                    break if newline_index == BUF_LEN - 1 && buf.filled()[newline_index] == b'\r' {
-                        pending_crlf = true;
+                    break if newline_index == BUF_LEN - 1 {
+                        pending_crlf = buf.filled()[newline_index] == b'\r';
                         buf.clear();
                         None
                     } else if failed {
@@ -89,9 +89,6 @@ fn main() -> ExitCode {
                 } else if buf.len() == buf.capacity() {
                     failed = true;
                     buf.clear();
-                } else if is_eof {
-                    // Reached EOF
-                    return ExitCode::from(2);
                 }
             }
         }};

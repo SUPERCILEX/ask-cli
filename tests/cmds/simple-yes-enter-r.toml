@@ -1,0 +1,5 @@
+bin.name = "ask"
+args = ["Continue?"]
+stdin = "\r"
+
+stdout = "Continue? [Y/n] "
