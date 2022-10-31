@@ -4,10 +4,11 @@ use std::{
     borrow::Cow,
     env,
     ffi::OsString,
-    io,
+    fs::File,
     io::{BorrowedBuf, Read, Write},
     mem,
-    mem::MaybeUninit,
+    mem::{ManuallyDrop, MaybeUninit},
+    os::fd::FromRawFd,
     process::ExitCode,
 };
 
@@ -78,8 +79,8 @@ fn main() -> ExitCode {
     let mut question = OsString::new();
     let question = parse_question(&mut question);
 
-    let mut stdin = io::stdin().lock();
-    let mut stdout = io::stdout().lock();
+    let mut stdin = ManuallyDrop::new(unsafe { File::from_raw_fd(0) });
+    let mut stdout = ManuallyDrop::new(unsafe { File::from_raw_fd(1) });
 
     let mut state = State::Start;
     loop {
@@ -89,9 +90,6 @@ fn main() -> ExitCode {
             },
             State::Ask { pending_crlf } => {
                 stdout.write_all(question.as_bytes()).unwrap();
-                stdout.write_all(b"[Y/n] ").unwrap();
-                stdout.flush().unwrap();
-
                 State::Read {
                     failed: false,
                     pending_crlf,
@@ -158,12 +156,15 @@ fn main() -> ExitCode {
 }
 
 fn parse_question(question: &mut OsString) -> Cow<'_, str> {
-    let words = || env::args_os().skip(1);
+    let words = env::args_os().skip(1);
 
-    question.reserve(words().len() + words().map(|word| word.len()).sum::<usize>());
-    for word in words() {
+    for word in words {
+        question.reserve(word.len() + 1);
+
         question.push(&word);
         question.push(" ");
     }
+    question.push("[Y/n] ");
+
     question.to_string_lossy()
 }
