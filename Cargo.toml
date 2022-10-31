@@ -1,6 +1,6 @@
 [package]
 name = "ask-cli"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Alex Saveau <saveau.alexandre@gmail.com>"]
 edition = "2021"
 description = "Ask CLI offers a simple way to ask a yes or no question."
