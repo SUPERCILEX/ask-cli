@@ -6,7 +6,6 @@ use std::{
     mem,
     mem::MaybeUninit,
     process::ExitCode,
-    str::from_utf8,
 };
 
 fn main() -> ExitCode {
@@ -112,11 +111,11 @@ fn main() -> ExitCode {
             continue;
         };
 
-        let reply = from_utf8(&buf.filled()[..newline_index]).unwrap();
+        let reply = &buf.filled()[..newline_index];
         // TODO https://github.com/rust-lang/rust/pull/103754
-        match reply.to_ascii_lowercase().as_str() {
-            "" | "y" | "yes" => return ExitCode::SUCCESS,
-            "n" | "no" => return ExitCode::FAILURE,
+        match reply.to_ascii_lowercase().as_slice() {
+            b"" | b"y" | b"yes" => return ExitCode::SUCCESS,
+            b"n" | b"no" => return ExitCode::FAILURE,
             _ => {
                 consume_newline!(newline_index);
             }
