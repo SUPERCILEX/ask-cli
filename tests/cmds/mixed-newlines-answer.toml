@@ -1,6 +1,6 @@
 bin.name = "ask"
 args = ["?"]
-stdin = "     \r\n \n \r \r\n \r \n  \n   \r  \r\n   \nn\r"
+stdin = "    \r\n \n \r \r\n \r \n  \n   \r  \r\n   \nn\r"
 
 stdout = "? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] ? [Y/n] "
 status.code = 1

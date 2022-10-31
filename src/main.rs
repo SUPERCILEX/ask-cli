@@ -41,39 +41,58 @@ fn main() -> ExitCode {
     }
 
     let mut stdin = io::stdin().lock();
+    let mut pending_crlf = false;
 
     /// Continuously reads from stdin until encountering a newline, returning
     /// the index of its first byte.
+    ///
+    /// This function deals with a number of edge cases:
+    /// - If stdin reaches the EOF, exit the process *after* processing all
+    ///   remaining input.
+    /// - If a \r byte is seen on the border of the buffer, fail the input
+    ///   (because it will be at a higher index than the max length of all
+    ///   possible valid replies and therefore cannot be a valid reply) and
+    ///   consume a \n if it is the next byte. Note that this consumption cannot
+    ///   happen before printing the question again or we might get blocked on
+    ///   stdin if there are no more bytes available.
+    /// - If no newline was found within the buffer, fail the reply since it
+    ///   cannot possibly be valid.
     macro_rules! read_line {
         () => {{
             let mut failed = false;
             loop {
-                stdin.read_buf(buf.unfilled()).unwrap();
-                if buf.len() == 0 {
+                let is_eof = {
+                    debug_assert!(buf.len() < buf.capacity());
+
+                    let prev_count = buf.len();
+                    stdin.read_buf(buf.unfilled()).unwrap();
+                    buf.len() == prev_count
+                };
+
+                if pending_crlf && buf.filled()[0] == b'\n' {
+                    consume_bytes!(1);
+                }
+                pending_crlf = false;
+
+                if let Some(newline_index) =
+                    buf.filled().iter().position(|b| *b == b'\n' || *b == b'\r')
+                {
+                    break if newline_index == BUF_LEN - 1 && buf.filled()[newline_index] == b'\r' {
+                        pending_crlf = true;
+                        buf.clear();
+                        None
+                    } else if failed {
+                        consume_newline!(newline_index);
+                        None
+                    } else {
+                        Some(newline_index)
+                    };
+                } else if buf.len() == buf.capacity() {
+                    failed = true;
+                    buf.clear();
+                } else if is_eof {
                     // Reached EOF
                     return ExitCode::from(2);
-                }
-
-                match buf.filled().iter().position(|b| *b == b'\n' || *b == b'\r') {
-                    Some(newline_index) if newline_index == BUF_LEN - 1 => {
-                        failed = true;
-                        // Potentially read in a '\n' to make a CRLF
-                        consume_bytes!(1);
-                    }
-                    Some(newline_index) => {
-                        break if failed {
-                            consume_newline!(newline_index);
-                            None
-                        } else {
-                            Some(newline_index)
-                        }
-                    }
-                    None => {
-                        if buf.len() == buf.capacity() {
-                            failed = true;
-                            buf.clear();
-                        }
-                    }
                 }
             }
         }};
