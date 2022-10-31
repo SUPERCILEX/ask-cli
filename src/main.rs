@@ -1,7 +1,10 @@
 #![feature(read_buf)]
 
 use std::{
-    env, io,
+    borrow::Cow,
+    env,
+    ffi::OsString,
+    io,
     io::{BorrowedBuf, Read, Write},
     mem,
     mem::MaybeUninit,
@@ -72,7 +75,9 @@ fn main() -> ExitCode {
         };
     }
 
-    let question = question();
+    let mut question = OsString::new();
+    let question = parse_question(&mut question);
+
     let mut stdin = io::stdin().lock();
     let mut stdout = io::stdout().lock();
 
@@ -152,14 +157,13 @@ fn main() -> ExitCode {
     }
 }
 
-fn question() -> String {
-    let words = || env::args().skip(1);
+fn parse_question(question: &mut OsString) -> Cow<'_, str> {
+    let words = || env::args_os().skip(1);
 
-    let mut question =
-        String::with_capacity(words().len() + words().map(|word| word.len()).sum::<usize>());
+    question.reserve(words().len() + words().map(|word| word.len()).sum::<usize>());
     for word in words() {
-        question.push_str(&word);
-        question.push(' ');
+        question.push(&word);
+        question.push(" ");
     }
-    question
+    question.to_string_lossy()
 }
