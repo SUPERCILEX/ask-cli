@@ -137,13 +137,10 @@ pub fn ask(
             } => {
                 debug_assert!(buf.len() < buf.capacity());
 
+                let prev_count = buf.len();
                 stdin.read_buf(buf.unfilled())?;
-                if buf.len() == 0 {
-                    // Reached EOF
-                    return Ok(Answer::Unknown);
-                }
 
-                if pending_crlf && buf.filled()[0] == b'\n' {
+                if pending_crlf && matches!(buf.filled().first(), Some(b'\n')) {
                     consume_bytes!(1);
                 }
 
@@ -166,6 +163,10 @@ pub fn ask(
                             failed: true,
                             pending_crlf: false,
                         }
+                    }
+                    None if !pending_crlf && buf.len() == prev_count => {
+                        // Reached EOF
+                        return Ok(Answer::Unknown);
                     }
                     None => State::Read {
                         failed: false,
