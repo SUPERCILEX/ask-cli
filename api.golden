@@ -1,0 +1,16 @@
+impl RefUnwindSafe for ask_cli::Answer
+impl Send for ask_cli::Answer
+impl Sync for ask_cli::Answer
+impl Unpin for ask_cli::Answer
+impl UnwindSafe for ask_cli::Answer
+pub enum ask_cli::Answer
+pub enum variant ask_cli::Answer::No
+pub enum variant ask_cli::Answer::Unknown
+pub enum variant ask_cli::Answer::Yes
+pub fn ask_cli::Answer::clone(&self) -> ask_cli::Answer
+pub fn ask_cli::Answer::eq(&self, other: &ask_cli::Answer) -> bool
+pub fn ask_cli::Answer::fmt(&self, f: &mut $crate::fmt::Formatter<'_>) -> $crate::fmt::Result
+pub fn ask_cli::Answer::hash<__H: $crate::hash::Hasher>(&self, state: &mut __H) -> ()
+pub fn ask_cli::Answer::report(self) -> ExitCode
+pub fn ask_cli::ask(question: impl AsRef<str>, stdin: &mut impl Read, stdout: &mut impl Write) -> Result<ask_cli::Answer, io::Error>
+pub mod ask_cli
