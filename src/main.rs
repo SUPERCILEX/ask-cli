@@ -8,7 +8,6 @@ use std::{
     io::{BorrowedBuf, Read, Write},
     mem,
     mem::{ManuallyDrop, MaybeUninit},
-    os::fd::FromRawFd,
     process::ExitCode,
 };
 
@@ -79,8 +78,7 @@ fn main() -> ExitCode {
     let mut question = OsString::new();
     let question = parse_question(&mut question);
 
-    let mut stdin = ManuallyDrop::new(unsafe { File::from_raw_fd(0) });
-    let mut stdout = ManuallyDrop::new(unsafe { File::from_raw_fd(1) });
+    let (mut stdin, mut stdout) = stdinout();
 
     let mut state = State::Start;
     loop {
@@ -167,4 +165,20 @@ fn parse_question(question: &mut OsString) -> Cow<'_, str> {
     question.push("[Y/n] ");
 
     question.to_string_lossy()
+}
+
+#[cfg(unix)]
+fn stdinout() -> (ManuallyDrop<File>, ManuallyDrop<File>) {
+    use std::os::fd::FromRawFd;
+    unsafe {
+        (
+            ManuallyDrop::new(File::from_raw_fd(0)),
+            ManuallyDrop::new(File::from_raw_fd(1)),
+        )
+    }
+}
+
+#[cfg(not(unix))]
+fn stdinout() -> (std::io::StdinLock<'static>, std::io::StdoutLock<'static>) {
+    (std::io::stdin().lock(), std::io::stdout().lock())
 }
