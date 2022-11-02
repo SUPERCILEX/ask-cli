@@ -209,3 +209,14 @@ pub fn ask<Q: AsRef<str>, In: Read, Out: Write>(
         }
     }
 }
+
+#[cfg(kani)]
+#[kani::proof]
+#[kani::unwind(5)]
+fn check_my_property() {
+    let input: [u8; 1] = kani::any();
+    let output = ask("?", &mut input.as_slice(), &mut std::io::sink());
+
+    output.unwrap();
+    // TODO Check that it meets the specification
+}
