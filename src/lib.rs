@@ -209,3 +209,13 @@ pub fn ask<Q: AsRef<str>, In: Read, Out: Write>(
         }
     }
 }
+
+#[cfg(kani)]
+#[kani::proof]
+#[kani::unwind(9)]
+fn ask_proof() {
+    let input: [u8; 4] = kani::any();
+    let output = ask("?", &mut input.as_slice(), &mut io::sink());
+
+    output.unwrap();
+}
