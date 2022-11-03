@@ -169,7 +169,7 @@ pub fn ask(
                         return Ok(Answer::Unknown);
                     }
                     None => State::Read {
-                        failed: false,
+                        failed,
                         pending_crlf: false,
                     },
                 }
