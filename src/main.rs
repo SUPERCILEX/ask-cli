@@ -7,7 +7,7 @@ fn main() -> impl Termination {
 
     #[cfg(unix)]
     {
-        use std::{fs::File, mem::ManuallyDrop, os::fd::FromRawFd};
+        use std::{fs::File, mem::ManuallyDrop, os::unix::io::FromRawFd};
 
         let mut stdin = ManuallyDrop::new(unsafe { File::from_raw_fd(0) });
         let mut stdout = ManuallyDrop::new(unsafe { File::from_raw_fd(1) });
