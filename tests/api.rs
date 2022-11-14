@@ -1,6 +1,6 @@
-use goldenfile::Mint;
+use expect_test::expect_file;
 use public_api::PublicApi;
-use std::io::Write;
+use std::fmt::Write;
 
 #[test]
 #[cfg_attr(miri, ignore)] // gnu_get_libc_version breaks miri
@@ -10,13 +10,14 @@ fn api() {
         .build()
         .unwrap();
 
-    let mut mint = Mint::new(".");
-    let mut goldenfile = mint.new_goldenfile("api.golden").unwrap();
-
-    let api = PublicApi::from_rustdoc_json(json_path, public_api::Options::default()).unwrap();
-    for public_item in api.items() {
-        writeln!(goldenfile, "{public_item}").unwrap();
+    let mut golden = String::new();
+    {
+        let api = PublicApi::from_rustdoc_json(json_path, public_api::Options::default()).unwrap();
+        for public_item in api.items() {
+            writeln!(golden, "{public_item}").unwrap();
+        }
     }
+    expect_file!["../api.golden"].assert_eq(&golden);
 }
 
 #[test]
