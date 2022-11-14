@@ -1,5 +1,6 @@
-use ask_cli::ask;
 use std::{borrow::Cow, env, ffi::OsString, process::Termination};
+
+use ask_cli::ask;
 
 fn main() -> impl Termination {
     let mut question = OsString::new();

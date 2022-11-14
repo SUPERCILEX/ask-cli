@@ -1,6 +1,7 @@
+use std::fmt::Write;
+
 use expect_test::expect_file;
 use public_api::PublicApi;
-use std::fmt::Write;
 
 #[test]
 #[cfg_attr(miri, ignore)] // gnu_get_libc_version breaks miri
