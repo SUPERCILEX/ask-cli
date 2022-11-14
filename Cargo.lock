@@ -84,16 +84,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cargo_toml"
-version = "0.13.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aa0e3586af56b3bfa51fca452bd56e8dbbbd5d8d81cbf0b7e4e35b695b537eb8"
-dependencies = [
- "serde",
- "toml",
-]
-
-[[package]]
 name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -111,9 +101,9 @@ dependencies = [
 
 [[package]]
 name = "concolor"
-version = "0.0.8"
+version = "0.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "015267563b1df20adccdd00cb05257b1dfbea70a04928e9cf88ffb850c1a40af"
+checksum = "b90f9dcd9490a97db91a85ccd79e38a87e14323f0bb824659ee3274e9143ba37"
 dependencies = [
  "atty",
  "bitflags",
@@ -122,9 +112,9 @@ dependencies = [
 
 [[package]]
 name = "concolor-query"
-version = "0.0.5"
+version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d6417fe6fc03a8b533fd2177742eeb39a90c7233eedec7bac96d4d6b69a09449"
+checksum = "82a90734b3d5dcf656e7624cca6bce9c3a90ee11f900e80141a7427ccfb3d317"
 
 [[package]]
 name = "console"
@@ -238,9 +228,9 @@ checksum = "9b919933a397b79c37e33b77bb2aa3dc8eb6e165ad809e58ff75bc7db2e34574"
 
 [[package]]
 name = "goldenfile"
-version = "1.4.3"
+version = "1.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "03bd0e9c2ea26ce269d37016d6b95556bbfa544cbbbdeff40102ac54121c990b"
+checksum = "bf1e66766a6a6960b997e03eeaa212b05b87e0275ede54eb3fe2ec1c6071305b"
 dependencies = [
  "similar-asserts",
  "tempfile",
@@ -352,9 +342,9 @@ checksum = "61807f77802ff30975e01f4f071c8ba10c022052f98b3294119f3e615d13e5be"
 
 [[package]]
 name = "num_cpus"
-version = "1.13.1"
+version = "1.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "19e64526ebdee182341572e50e9ad03965aa510cd94427a4549448f285e957a1"
+checksum = "f6058e64324c71e02bc2b150e4f3bc8286db6c83092132ffa3f6b1eab0f9def5"
 dependencies = [
  "hermit-abi",
  "libc",
@@ -381,9 +371,9 @@ dependencies = [
 
 [[package]]
 name = "public-api"
-version = "0.21.0"
+version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "072dd22372c99f9575189553518cc30e499ca0b120a1da40b7a1f5feecf6d647"
+checksum = "7120a6a827b487b4163ccf9df45264de2c9ccc3cadb8d8deee302dcf39476eae"
 dependencies = [
  "hashbag",
  "rustdoc-types",
@@ -451,13 +441,14 @@ dependencies = [
 
 [[package]]
 name = "rustdoc-json"
-version = "0.5.0"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc436a65d0531ae3518f0784e6fa738dbe1669bf5c24b47984d7b5cabe1256f2"
+checksum = "7ec92eeb5447a6c46892b27a58636272c27943806fbe3979343d9ad438347cae"
 dependencies = [
  "cargo_metadata",
- "cargo_toml",
+ "serde",
  "thiserror",
+ "toml",
 ]
 
 [[package]]
@@ -558,14 +549,15 @@ dependencies = [
 
 [[package]]
 name = "snapbox"
-version = "0.4.0"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f98a96656eecd1621c5830831b48eb6903a9f86aaeb61b9f358a9bd462414ddd"
+checksum = "827c00e91b15e2674d8a5270bae91f898693cbf9561cbb58d8eaa31974597293"
 dependencies = [
  "concolor",
  "content_inspector",
  "dunce",
  "filetime",
+ "libc",
  "normalize-line-endings",
  "os_pipe",
  "similar",
@@ -573,6 +565,7 @@ dependencies = [
  "tempfile",
  "wait-timeout",
  "walkdir",
+ "winapi",
  "yansi",
 ]
 
@@ -670,9 +663,9 @@ dependencies = [
 
 [[package]]
 name = "trycmd"
-version = "0.14.1"
+version = "0.14.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7ea164949c690a45580a50ebb8b4d5e3f907b134d26009dbe45878225ebb0374"
+checksum = "e44a0ef010323b99f3b8fc13c6cac2e25df2e3bf5daacea5abef7bf5bd841bb8"
 dependencies = [
  "glob",
  "humantime",

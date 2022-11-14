@@ -10,10 +10,10 @@ categories = ["command-line-utilities"]
 license = "Apache-2.0"
 
 [dev-dependencies]
-goldenfile = "1.4.3"
-public-api = "0.21.0"
-rustdoc-json = "0.5.0"
-trycmd = "0.14.1"
+goldenfile = "1.4.5"
+public-api = "0.22.0"
+rustdoc-json = "0.6.0"
+trycmd = "0.14.4"
 
 [[bin]]
 name = "ask"
