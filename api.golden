@@ -3,23 +3,23 @@ pub enum ask_cli::Answer
 pub enum variant ask_cli::Answer::No
 pub enum variant ask_cli::Answer::Unknown
 pub enum variant ask_cli::Answer::Yes
-impl Clone for ask_cli::Answer
+impl core::clone::Clone for ask_cli::Answer
 pub fn ask_cli::Answer::clone(&self) -> ask_cli::Answer
-impl Copy for ask_cli::Answer
-impl Debug for ask_cli::Answer
-pub fn ask_cli::Answer::fmt(&self, f: &mut $crate::fmt::Formatter<'_>) -> $crate::fmt::Result
-impl Eq for ask_cli::Answer
-impl Hash for ask_cli::Answer
-pub fn ask_cli::Answer::hash<__H: $crate::hash::Hasher>(&self, state: &mut __H) -> ()
-impl PartialEq<ask_cli::Answer> for ask_cli::Answer
+impl core::marker::Copy for ask_cli::Answer
+impl core::fmt::Debug for ask_cli::Answer
+pub fn ask_cli::Answer::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::cmp::Eq for ask_cli::Answer
+impl core::hash::Hash for ask_cli::Answer
+pub fn ask_cli::Answer::hash<__H: core::hash::Hasher>(&self, state: &mut __H) -> ()
+impl core::cmp::PartialEq<ask_cli::Answer> for ask_cli::Answer
 pub fn ask_cli::Answer::eq(&self, other: &ask_cli::Answer) -> bool
-impl StructuralEq for ask_cli::Answer
-impl StructuralPartialEq for ask_cli::Answer
-impl Termination for ask_cli::Answer
-pub fn ask_cli::Answer::report(self) -> ExitCode
-impl RefUnwindSafe for ask_cli::Answer
-impl Send for ask_cli::Answer
-impl Sync for ask_cli::Answer
-impl Unpin for ask_cli::Answer
-impl UnwindSafe for ask_cli::Answer
-pub fn ask_cli::ask(question: impl AsRef<str>, stdin: &mut impl Read, stdout: &mut impl Write) -> Result<ask_cli::Answer, io::Error>
+impl core::marker::StructuralEq for ask_cli::Answer
+impl core::marker::StructuralPartialEq for ask_cli::Answer
+impl std::process::Termination for ask_cli::Answer
+pub fn ask_cli::Answer::report(self) -> std::process::ExitCode
+impl core::panic::unwind_safe::RefUnwindSafe for ask_cli::Answer
+impl core::marker::Send for ask_cli::Answer
+impl core::marker::Sync for ask_cli::Answer
+impl core::marker::Unpin for ask_cli::Answer
+impl core::panic::unwind_safe::UnwindSafe for ask_cli::Answer
+pub fn ask_cli::ask(question: impl core::convert::AsRef<str>, stdin: &mut impl std::io::Read, stdout: &mut impl std::io::Write) -> core::result::Result<ask_cli::Answer, std::io::error::Error>

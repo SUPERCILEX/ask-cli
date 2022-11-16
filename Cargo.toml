@@ -11,7 +11,7 @@ license = "Apache-2.0"
 
 [dev-dependencies]
 expect-test = "1.4.0"
-public-api = "0.22.0"
+public-api = "0.23.0"
 rustdoc-json = "0.6.0"
 trycmd = "0.14.4"
 
