@@ -126,6 +126,7 @@ pub fn ask(
             },
             State::Ask { pending_crlf } => {
                 stdout.write_all(question.as_ref().as_bytes())?;
+                stdout.flush()?;
                 State::Read {
                     failed: false,
                     pending_crlf,
