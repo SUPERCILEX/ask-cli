@@ -68,16 +68,33 @@ enum State {
 ///
 /// ```
 /// # use std::{io, io::Read, str::from_utf8};
-/// use ask_cli::{Answer, ask};
+/// use ask_cli::{ask, Answer};
 ///
-/// assert!(matches!(ask("Continue? [Y/n] ", &mut "y\n".as_bytes(), &mut io::sink()), Ok(Answer::Yes)));
-/// assert!(matches!(ask("Continue? [Y/n] ", &mut "n\n".as_bytes(), &mut io::sink()), Ok(Answer::No)));
-/// assert!(matches!(ask("Continue? [Y/n] ", &mut "".as_bytes(), &mut io::sink()), Ok(Answer::Unknown)));
+/// assert!(matches!(
+///     ask("Continue? [Y/n] ", &mut "y\n".as_bytes(), &mut io::sink()),
+///     Ok(Answer::Yes)
+/// ));
+/// assert!(matches!(
+///     ask("Continue? [Y/n] ", &mut "n\n".as_bytes(), &mut io::sink()),
+///     Ok(Answer::No)
+/// ));
+/// assert!(matches!(
+///     ask("Continue? [Y/n] ", &mut "".as_bytes(), &mut io::sink()),
+///     Ok(Answer::Unknown)
+/// ));
 ///
 /// // Here we use 3 different kinds of line endings
 /// let mut stdout = Vec::new();
-/// ask("Continue? [Y/n] ", &mut "a\nb\rc\r\nyes\n".as_bytes(), &mut stdout).unwrap();
-/// assert_eq!("Continue? [Y/n] Continue? [Y/n] Continue? [Y/n] Continue? [Y/n] ", from_utf8(&stdout).unwrap());
+/// ask(
+///     "Continue? [Y/n] ",
+///     &mut "a\nb\rc\r\nyes\n".as_bytes(),
+///     &mut stdout,
+/// )
+/// .unwrap();
+/// assert_eq!(
+///     "Continue? [Y/n] Continue? [Y/n] Continue? [Y/n] Continue? [Y/n] ",
+///     from_utf8(&stdout).unwrap()
+/// );
 /// ```
 ///
 /// # Errors
