@@ -22,4 +22,24 @@ impl core::marker::Send for ask_cli::Answer
 impl core::marker::Sync for ask_cli::Answer
 impl core::marker::Unpin for ask_cli::Answer
 impl core::panic::unwind_safe::UnwindSafe for ask_cli::Answer
+impl<T> core::any::Any for ask_cli::Answer where T: 'static + core::marker::Sized
+pub fn ask_cli::Answer::type_id(&self) -> core::any::TypeId
+impl<T> core::borrow::Borrow<T> for ask_cli::Answer where T: core::marker::Sized
+pub fn ask_cli::Answer::borrow(&self) -> &T
+impl<T> core::borrow::BorrowMut<T> for ask_cli::Answer where T: core::marker::Sized
+pub fn ask_cli::Answer::borrow_mut(&mut self) -> &mut T
+impl<T> core::convert::From<T> for ask_cli::Answer
+pub fn ask_cli::Answer::from(t: T) -> T
+impl<T, U> core::convert::Into<U> for ask_cli::Answer where U: core::convert::From<T>
+pub fn ask_cli::Answer::into(self) -> U
+impl<T> alloc::borrow::ToOwned for ask_cli::Answer where T: core::clone::Clone
+pub type ask_cli::Answer::Owned = T
+pub fn ask_cli::Answer::clone_into(&self, target: &mut T)
+pub fn ask_cli::Answer::to_owned(&self) -> T
+impl<T, U> core::convert::TryFrom<U> for ask_cli::Answer where U: core::convert::Into<T>
+pub type ask_cli::Answer::Error = core::convert::Infallible
+pub fn ask_cli::Answer::try_from(value: U) -> core::result::Result<T, <T as core::convert::TryFrom<U>>::Error>
+impl<T, U> core::convert::TryInto<U> for ask_cli::Answer where U: core::convert::TryFrom<T>
+pub type ask_cli::Answer::Error = <U as core::convert::TryFrom<T>>::Error
+pub fn ask_cli::Answer::try_into(self) -> core::result::Result<U, <U as core::convert::TryFrom<T>>::Error>
 pub fn ask_cli::ask(question: impl core::convert::AsRef<str>, stdin: &mut impl std::io::Read, stdout: &mut impl std::io::Write) -> core::result::Result<ask_cli::Answer, std::io::error::Error>
