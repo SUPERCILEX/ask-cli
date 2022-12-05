@@ -42,4 +42,4 @@ pub fn ask_cli::Answer::try_from(value: U) -> core::result::Result<T, <T as core
 impl<T, U> core::convert::TryInto<U> for ask_cli::Answer where U: core::convert::TryFrom<T>
 pub type ask_cli::Answer::Error = <U as core::convert::TryFrom<T>>::Error
 pub fn ask_cli::Answer::try_into(self) -> core::result::Result<U, <U as core::convert::TryFrom<T>>::Error>
-pub fn ask_cli::ask(question: impl core::convert::AsRef<str>, stdin: &mut impl std::io::Read, stdout: &mut impl std::io::Write) -> core::result::Result<ask_cli::Answer, std::io::error::Error>
+pub fn ask_cli::ask<Q: core::convert::AsRef<str>, In: std::io::Read, Out: std::io::Write>(question: Q, stdin: &mut In, stdout: &mut Out) -> core::result::Result<ask_cli::Answer, std::io::error::Error>

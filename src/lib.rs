@@ -100,10 +100,10 @@ enum State {
 /// # Errors
 ///
 /// Underlying I/O errors are bubbled up.
-pub fn ask(
-    question: impl AsRef<str>,
-    stdin: &mut impl Read,
-    stdout: &mut impl Write,
+pub fn ask<Q: AsRef<str>, In: Read, Out: Write>(
+    question: Q,
+    stdin: &mut In,
+    stdout: &mut Out,
 ) -> Result<Answer, io::Error> {
     // max_len(yes, no, y, n) = 3 -> 3 + 2 bytes for new lines
     const BUF_LEN: usize = 5;
