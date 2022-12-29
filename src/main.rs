@@ -12,7 +12,7 @@ fn main() -> impl Termination {
 
         let mut stdin = ManuallyDrop::new(unsafe { File::from_raw_fd(0) });
         let mut stdout = ManuallyDrop::new(unsafe { File::from_raw_fd(1) });
-        ask(question, &mut *stdin, &mut *stdout).unwrap()
+        ask(question, &mut *stdin, &mut *stdout)
     }
     #[cfg(not(unix))]
     {
@@ -20,7 +20,7 @@ fn main() -> impl Termination {
 
         let mut stdin = io::stdin().lock();
         let mut stdout = io::stdout().lock();
-        ask(&question, &mut stdin, &mut stdout).unwrap()
+        ask(&question, &mut stdin, &mut stdout)
     }
 }
 
