@@ -6,6 +6,7 @@ fn main() -> impl Termination {
     let mut question = OsString::new();
     let question = parse_question(&mut question);
 
+    // TODO https://github.com/rust-lang/libs-team/issues/148
     #[cfg(unix)]
     {
         use std::{fs::File, mem::ManuallyDrop, os::unix::io::FromRawFd};
