@@ -20,7 +20,7 @@ fn main() -> impl Termination {
 
         let mut stdin = io::stdin().lock();
         let mut stdout = io::stdout().lock();
-        ask(&question, &mut stdin, &mut stdout)
+        ask(question, &mut stdin, &mut stdout)
     }
 }
 
