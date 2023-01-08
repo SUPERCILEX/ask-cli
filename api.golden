@@ -3,6 +3,8 @@ pub enum ask_cli::Answer
 pub ask_cli::Answer::No
 pub ask_cli::Answer::Unknown
 pub ask_cli::Answer::Yes
+impl std::process::Termination for ask_cli::Answer
+pub fn ask_cli::Answer::report(self) -> std::process::ExitCode
 impl core::clone::Clone for ask_cli::Answer
 pub fn ask_cli::Answer::clone(&self) -> ask_cli::Answer
 impl core::marker::Copy for ask_cli::Answer
@@ -15,8 +17,6 @@ impl core::cmp::PartialEq<ask_cli::Answer> for ask_cli::Answer
 pub fn ask_cli::Answer::eq(&self, other: &ask_cli::Answer) -> bool
 impl core::marker::StructuralEq for ask_cli::Answer
 impl core::marker::StructuralPartialEq for ask_cli::Answer
-impl std::process::Termination for ask_cli::Answer
-pub fn ask_cli::Answer::report(self) -> std::process::ExitCode
 impl core::panic::unwind_safe::RefUnwindSafe for ask_cli::Answer
 impl core::marker::Send for ask_cli::Answer
 impl core::marker::Sync for ask_cli::Answer
