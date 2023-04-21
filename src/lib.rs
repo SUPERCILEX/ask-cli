@@ -162,7 +162,7 @@ pub fn ask<Q: AsRef<str>, In: Read, Out: Write>(
                     consume_bytes!(1);
                 }
 
-                match buf.filled().iter().position(|b| *b == b'\n' || *b == b'\r') {
+                match buf.filled().iter().position(|&b| b == b'\n' || b == b'\r') {
                     Some(newline_index) if newline_index == BUF_LEN - 1 => {
                         let pending_crlf = buf.filled()[newline_index] == b'\r';
                         buf.clear();
