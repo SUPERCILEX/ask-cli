@@ -193,9 +193,9 @@ pub fn ask<Q: AsRef<str>, In: Read, Out: Write>(
                 }
             }
             State::HandleReply { newline_index } => {
-                let reply = &buf.filled()[..newline_index];
-                // TODO https://github.com/rust-lang/rust/pull/103754
-                match reply.to_ascii_lowercase().as_slice() {
+                let reply = &mut buf.filled_mut()[..newline_index];
+                reply.make_ascii_lowercase();
+                match &*reply {
                     b"" | b"y" | b"yes" => return Ok(Answer::Yes),
                     b"n" | b"no" => return Ok(Answer::No),
                     _ => {
