@@ -100,7 +100,7 @@ enum State {
 /// # Errors
 ///
 /// Underlying I/O errors are bubbled up.
-pub fn ask<Q: AsRef<str>, In: Read, Out: Write>(
+pub fn ask<Q: AsRef<[u8]>, In: Read, Out: Write>(
     question: Q,
     stdin: &mut In,
     stdout: &mut Out,
@@ -142,7 +142,7 @@ pub fn ask<Q: AsRef<str>, In: Read, Out: Write>(
                 pending_crlf: false,
             },
             State::Ask { pending_crlf } => {
-                stdout.write_all(question.as_ref().as_bytes())?;
+                stdout.write_all(question.as_ref())?;
                 stdout.flush()?;
                 State::Read {
                     failed: false,
