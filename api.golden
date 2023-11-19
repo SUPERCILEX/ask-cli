@@ -8,7 +8,7 @@ pub fn ask_cli::Answer::report(self) -> std::process::ExitCode
 impl core::clone::Clone for ask_cli::Answer
 pub fn ask_cli::Answer::clone(&self) -> ask_cli::Answer
 impl core::cmp::Eq for ask_cli::Answer
-impl core::cmp::PartialEq<ask_cli::Answer> for ask_cli::Answer
+impl core::cmp::PartialEq for ask_cli::Answer
 pub fn ask_cli::Answer::eq(&self, other: &ask_cli::Answer) -> bool
 impl core::fmt::Debug for ask_cli::Answer
 pub fn ask_cli::Answer::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
