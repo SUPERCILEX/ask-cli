@@ -62,32 +62,57 @@ enum State {
 /// Ask the user a yes or no question on stdout, reading the reply from stdin.
 ///
 /// Replies are delimited by newlines of any kind and must be one of '' (maps to
-/// yes), 'y', 'yes', 'n', 'no', case insensitive. If the reply fails to parse,
+/// yes), 'y', 'yes', 'n', 'no', case-insensitive. If the reply fails to parse,
 /// the question will be asked again ad infinitum.
 ///
 /// # Examples
 ///
 /// ```
-/// # use std::{io, io::Read, str::from_utf8};
+/// # use std::{io, str::from_utf8};
 /// use ask_cli::{ask, Answer};
 ///
 /// assert!(matches!(
-///     ask("Continue? [Y/n] ", &mut "y\n".as_bytes(), &mut io::sink()),
+///     ask(
+///         "Continue? [Y/n] ",
+///         Answer::Yes,
+///         &mut "y\n".as_bytes(),
+///         &mut io::sink()
+///     ),
 ///     Ok(Answer::Yes)
 /// ));
 /// assert!(matches!(
-///     ask("Continue? [Y/n] ", &mut "n\n".as_bytes(), &mut io::sink()),
+///     ask(
+///         "Continue? [Y/n] ",
+///         Answer::Yes,
+///         &mut "n\n".as_bytes(),
+///         &mut io::sink()
+///     ),
 ///     Ok(Answer::No)
 /// ));
 /// assert!(matches!(
-///     ask("Continue? [Y/n] ", &mut "".as_bytes(), &mut io::sink()),
+///     ask(
+///         "Continue? [Y/n] ",
+///         Answer::Yes,
+///         &mut "".as_bytes(),
+///         &mut io::sink()
+///     ),
 ///     Ok(Answer::Unknown)
+/// ));
+/// assert!(matches!(
+///     ask(
+///         "Continue? [y/N] ",
+///         Answer::No,
+///         &mut "\n".as_bytes(),
+///         &mut io::sink()
+///     ),
+///     Ok(Answer::No)
 /// ));
 ///
 /// // Here we use 3 different kinds of line endings
 /// let mut stdout = Vec::new();
-/// ask(
+/// let answer = ask(
 ///     "Continue? [Y/n] ",
+///     Answer::Yes,
 ///     &mut "a\nb\rc\r\nyes\n".as_bytes(),
 ///     &mut stdout,
 /// )
@@ -96,6 +121,7 @@ enum State {
 ///     "Continue? [Y/n] Continue? [Y/n] Continue? [Y/n] Continue? [Y/n] ",
 ///     from_utf8(&stdout).unwrap()
 /// );
+/// assert!(matches!(answer, Answer::Yes));
 /// ```
 ///
 /// # Errors
@@ -103,6 +129,7 @@ enum State {
 /// Underlying I/O errors are bubbled up.
 pub fn ask<Q: AsRef<[u8]>, In: Read, Out: Write>(
     question: Q,
+    default: Answer,
     stdin: &mut In,
     stdout: &mut Out,
 ) -> Result<Answer, io::Error> {
@@ -197,7 +224,8 @@ pub fn ask<Q: AsRef<[u8]>, In: Read, Out: Write>(
                 let reply = &mut buf.filled_mut()[..newline_index];
                 reply.make_ascii_lowercase();
                 match &*reply {
-                    b"" | b"y" | b"yes" => return Ok(Answer::Yes),
+                    b"" => return Ok(default),
+                    b"y" | b"yes" => return Ok(Answer::Yes),
                     b"n" | b"no" => return Ok(Answer::No),
                     _ => {
                         consume_newline!(newline_index);

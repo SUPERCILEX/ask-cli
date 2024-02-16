@@ -1,6 +1,6 @@
 use std::{env, ffi::OsString, process::Termination};
 
-use ask_cli::ask;
+use ask_cli::{ask, Answer};
 
 fn main() -> impl Termination {
     let mut question = OsString::new();
@@ -17,7 +17,7 @@ fn main() -> impl Termination {
 
         let mut stdin = ManuallyDrop::new(unsafe { File::from_raw_fd(0) });
         let mut stdout = ManuallyDrop::new(unsafe { File::from_raw_fd(1) });
-        ask(question.as_bytes(), &mut *stdin, &mut *stdout)
+        ask(question.as_bytes(), Answer::Yes, &mut *stdin, &mut *stdout)
     }
     #[cfg(not(unix))]
     {
@@ -27,6 +27,7 @@ fn main() -> impl Termination {
         let mut stdout = io::stdout().lock();
         ask(
             question.to_string_lossy().as_bytes(),
+            Answer::Yes,
             &mut stdin,
             &mut stdout,
         )
