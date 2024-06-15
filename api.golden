@@ -16,6 +16,7 @@ impl core::marker::Copy for ask_cli::Answer
 impl core::marker::StructuralPartialEq for ask_cli::Answer
 impl std::process::Termination for ask_cli::Answer
 pub fn ask_cli::Answer::report(self) -> std::process::ExitCode
+impl core::marker::Freeze for ask_cli::Answer
 impl core::marker::Send for ask_cli::Answer
 impl core::marker::Sync for ask_cli::Answer
 impl core::marker::Unpin for ask_cli::Answer

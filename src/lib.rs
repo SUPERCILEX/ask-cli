@@ -30,7 +30,7 @@ impl Termination for Answer {
 enum State {
     Start,
     Ask {
-        /// Passthrough for [State::Read].
+        /// Passthrough for [`State::Read`].
         pending_crlf: bool,
     },
     /// Continuously reads from stdin until encountering a newline,
