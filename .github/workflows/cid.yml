@@ -111,7 +111,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: target/${{ matrix.target }}/release/ask
-          asset_name: ask-${{ matrix.target }}
+          asset_name: ${{ matrix.target }}-ask
           tag: ${{ github.ref }}
       - name: Upload binary
         if: matrix.os == 'windows-latest'
@@ -119,5 +119,5 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: target/${{ matrix.target }}/release/ask.exe
-          asset_name: ask-${{ matrix.target }}.exe
+          asset_name: ${{ matrix.target }}-ask.exe
           tag: ${{ github.ref }}
