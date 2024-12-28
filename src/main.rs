@@ -1,6 +1,6 @@
 use std::{env, ffi::OsString, process::Termination};
 
-use ask_cli::{ask, Answer};
+use ask_cli::{Answer, ask};
 
 fn main() -> impl Termination {
     let mut question = OsString::new();

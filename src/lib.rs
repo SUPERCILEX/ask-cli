@@ -69,7 +69,7 @@ enum State {
 ///
 /// ```
 /// # use std::{io, str::from_utf8};
-/// use ask_cli::{ask, Answer};
+/// use ask_cli::{Answer, ask};
 ///
 /// assert!(matches!(
 ///     ask(

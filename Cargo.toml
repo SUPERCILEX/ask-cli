@@ -2,7 +2,7 @@
 name = "ask-cli"
 version = "0.3.0"
 authors = ["Alex Saveau <saveau.alexandre@gmail.com>"]
-edition = "2021"
+edition = "2024"
 description = "Ask CLI offers a simple way to ask a yes or no question."
 repository = "https://github.com/SUPERCILEX/ask-cli"
 keywords = ["cli", "answer", "ask", "question", "prompt"]
@@ -10,8 +10,8 @@ categories = ["command-line-utilities"]
 license = "Apache-2.0"
 
 [dev-dependencies]
-supercilex-tests = { version = "0.4.8", default-features = false, features = ["api"] }
-trycmd = "0.15.6"
+supercilex-tests = { version = "0.4.13", default-features = false, features = ["api"] }
+trycmd = "0.15.8"
 
 [[bin]]
 name = "ask"
