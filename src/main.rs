@@ -1,3 +1,5 @@
+#![cfg_attr(unix, feature(stdio_fd_consts))]
+
 use std::{env, ffi::OsString, process::Termination};
 
 use ask_cli::{Answer, ask};
@@ -12,11 +14,14 @@ fn main() -> impl Termination {
         use std::{
             fs::File,
             mem::ManuallyDrop,
-            os::unix::{ffi::OsStrExt, io::FromRawFd},
+            os::{
+                fd::{AsRawFd, STDIN, STDOUT},
+                unix::{ffi::OsStrExt, io::FromRawFd},
+            },
         };
 
-        let mut stdin = ManuallyDrop::new(unsafe { File::from_raw_fd(0) });
-        let mut stdout = ManuallyDrop::new(unsafe { File::from_raw_fd(1) });
+        let mut stdin = ManuallyDrop::new(unsafe { File::from_raw_fd(STDIN.as_raw_fd()) });
+        let mut stdout = ManuallyDrop::new(unsafe { File::from_raw_fd(STDOUT.as_raw_fd()) });
         ask(question.as_bytes(), Answer::Yes, &mut *stdin, &mut *stdout)
     }
     #[cfg(not(unix))]

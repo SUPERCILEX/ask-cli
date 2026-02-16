@@ -10,8 +10,8 @@ categories = ["command-line-utilities"]
 license = "Apache-2.0"
 
 [dev-dependencies]
-supercilex-tests = { version = "0.4.13", default-features = false, features = ["api"] }
-trycmd = "0.15.8"
+supercilex-tests = { version = "0.4.21", default-features = false, features = ["api"] }
+trycmd = "1.0.0"
 
 [[bin]]
 name = "ask"

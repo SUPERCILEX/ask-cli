@@ -20,6 +20,7 @@ impl core::marker::Freeze for ask_cli::Answer
 impl core::marker::Send for ask_cli::Answer
 impl core::marker::Sync for ask_cli::Answer
 impl core::marker::Unpin for ask_cli::Answer
+impl core::marker::UnsafeUnpin for ask_cli::Answer
 impl core::panic::unwind_safe::RefUnwindSafe for ask_cli::Answer
 impl core::panic::unwind_safe::UnwindSafe for ask_cli::Answer
 impl<T, U> core::convert::Into<U> for ask_cli::Answer where U: core::convert::From<T>
@@ -41,7 +42,7 @@ pub fn ask_cli::Answer::borrow(&self) -> &T
 impl<T> core::borrow::BorrowMut<T> for ask_cli::Answer where T: ?core::marker::Sized
 pub fn ask_cli::Answer::borrow_mut(&mut self) -> &mut T
 impl<T> core::clone::CloneToUninit for ask_cli::Answer where T: core::clone::Clone
-pub unsafe fn ask_cli::Answer::clone_to_uninit(&self, dst: *mut u8)
+pub unsafe fn ask_cli::Answer::clone_to_uninit(&self, dest: *mut u8)
 impl<T> core::convert::From<T> for ask_cli::Answer
 pub fn ask_cli::Answer::from(t: T) -> T
 pub fn ask_cli::ask<Q: core::convert::AsRef<[u8]>, In: std::io::Read, Out: std::io::Write>(question: Q, default: ask_cli::Answer, stdin: &mut In, stdout: &mut Out) -> core::result::Result<ask_cli::Answer, std::io::error::Error>
